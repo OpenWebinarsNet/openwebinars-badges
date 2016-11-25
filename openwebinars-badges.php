@@ -39,7 +39,10 @@ function openwebinars_badges_menu() {
 }
 add_action( 'admin_menu', 'openwebinars_badges_menu' );
 
-
+/*
+ * Limiting the plugin usage to Editor or Admins.
+ * Incluiding other plugin files needed to work.
+ */
 function openwebinars_badges_options_page() {
   if( !current_user_can( 'manage_options' ) ) {
     wp_die( 'You do not have sufficient permissions to access this page.' );
@@ -51,6 +54,10 @@ function openwebinars_badges_options_page() {
 
 }
 
+
+/*
+ * Addind custom styles to our plugin
+ */
 function openwebinars_badges_styles() {
   wp_enqueue_style( 'openwebinars_badges_styles', plugins_url( 'openwebinars-badges/openwebinars-badges.css' ) );
 }
