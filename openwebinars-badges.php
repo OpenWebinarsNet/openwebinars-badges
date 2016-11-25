@@ -50,6 +50,19 @@ function openwebinars_badges_options_page() {
 
   global $plugin_url;
 
+  /*
+   * Check that our form has been submitted
+   */
+  if ( isset( $_POST['openwebinars_form_submitted'] ) ) {
+    $hidden_field = esc_html( $_POST['openwebinars_form_submitted'] );
+
+    if ( $hidden_field == 'Y' ) {
+      $openwebinars_email = esc_html( $_POST['openwebinars_email'] );
+
+      // echo $openwebinars_email;
+    }
+  }
+
   require( 'inc/options-page-wrapper.php' );
 
 }
