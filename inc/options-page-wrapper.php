@@ -1,5 +1,3 @@
-<h2><?php esc_attr_e( '2 Columns Layout: static (px)', 'wp_admin_style' ); ?></h2>
-
 <div class="wrap">
 
 	<div id="icon-options-general" class="icon32"></div>
@@ -23,20 +21,23 @@
 						</h2>
 
 						<div class="inside">
-              <form class="" action="" method="post">
+              <form name="openwebinars_email_form" action="" method="post">
+
+								<input type="hidden" name="openwebinars_form_submitted" value="Y">
+
                 <table class="form-table">
                 	<tr>
                     <td>
-                      <label for="openwebinars_username">OpenWebinars username</label>
+                      <label for="openwebinars_email">OpenWebinars email</label>
                     </td>
                     <td>
-                      <input name="openwebinars_username" id="openwebinars_username" type="text" value="openwebinars_username" class="regular-text" /><br>
+                      <input name="openwebinars_email" id="openwebinars_email" type="text" value="openwebinars_email" class="regular-text" /><br>
                     </td>
                   </tr>
                 </table>
 
                 <p>
-                  <input class="button-primary" type="submit" name="openwebinars_username_submit" value="<?php esc_attr_e( 'Save' ); ?>" />
+                  <input class="button-primary" type="submit" name="openwebinars_email_submit" value="<?php esc_attr_e( 'Save' ); ?>" />
                 </p>
               </form>
 						</div>
@@ -90,9 +91,9 @@
 				<div class="meta-box-sortables">
 
 					<div class="postbox">
-						<h3><span>Jose Arcos' Profile</span></h3>
+						<h3><span>Chip' Profile</span></h3>
 						<div class="inside">
-							<p><img src="<?php echo $plugin_url . '/images/profile.png'; ?>" width='100%' class='openwebinars-gravatar' alt="Jose Arcos' Profile"></p>
+							<p><img src="<?php echo $plugin_url . '/images/profile.png'; ?>" width='100%' class='openwebinars-gravatar' alt="Chip squirrel' Profile"></p>
 							<ul class="openwebinars-badges-and-points">
 								<li>Badges: <strong>200</strong></li>
 								<li>Points: <strong>10000</strong></li>
