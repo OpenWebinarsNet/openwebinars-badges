@@ -61,8 +61,22 @@ function openwebinars_badges_options_page() {
     if ( $hidden_field == 'Y' ) {
       $openwebinars_email = esc_html( $_POST['openwebinars_email'] );
 
+      /*
+       * Store form options in database
+       */
+      $options['openwebinars_email']    = $openwebinars_email;
+      $options['last_updated']          = time();
+
+      update_option( 'openwebinars_badges', $options );
+
       // echo $openwebinars_email;
     }
+  }
+
+  $options = get_option( 'openwebinars_badges' );
+
+  if( $options != '' ) {
+    $openwebinars_email = $options['openwebinars_email'];
   }
 
   require( 'inc/options-page-wrapper.php' );

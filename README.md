@@ -1051,9 +1051,52 @@ add_action( 'admin_head', 'openwebinars_badges_styles' );
 
 ## Trabajando con formularios en la página de configuración
 
+Como bien sabes, para trabajar con formularios en PHP tenemos dos métodos de envío y recepción de datos: GET y POST. Ya hemos usado un ejemplo del método GET en nuestro plugin, puedes verlo de hecho en la URL del mismo: `options-general.php?page=openwebinars-badges`.
 
+Es importante validar y securizar tus formularios. Una buena forma de hacerlo es añadir un campo oculto que nos prevendrá de SPAM en nuestros formularios.
+
+```<input type="hidden" name="openwebinars_form_submitted" value="Y">```
+
+En el lado servidor debemos comprobar este campo para comenzar a renderizar el formulario:
+
+```/*
+ * Check that our form has been submitted
+ */
+if ( isset( $_POST['openwebinars_form_submitted'] ) ) {
+	$hidden_field = esc_html( $_POST['openwebinars_form_submitted'] );
+
+	if ( $hidden_field == 'Y' ) {
+		$openwebinars_email = esc_html( $_POST['openwebinars_email'] );
+
+		// echo $openwebinars_email;
+	}
+}
+```
 
 ## Funciones básicas con la tabla wp_options
+
+Una vez que sabemos cómo obtener los datos, tenemos que aprender a poder guardarlos en la Base de Datos para poder acceder a ellos nuevamente. WordPress nos proporciona una tabal llamada `options` para este propósito.
+
+La tabla `options` tiene 4 campos:
+
++ `option_id` - se autoincrementa.
++ `option_name` - toma un nombre único, así podremos encontrar este campo fácilmente.
++ `option_value` - guardará toda la información del plugin que queramos.
++ `autoload` - por defecto es `yes`, así podremos cargar la información desde el arranque de WordPress.
+
+Aunque MySQL no permite guardar arrays, sí que podemos serializarlos en cadenas. Las funciones `add_option`, `get_option`, `update_option` y `delete_option` nos ayudarán a realizar operaciones CRUD con la tabla `options` y nuestro plugin.
+
+```
+// Global variable
+$options = array();
+/*
+ * Store form options in database
+ */
+$options['openwebinars_email']    = $openwebinars_email;
+$options['last_updated']          = time();
+
+update_option( 'openwebinars_badges', $options );
+```
 
 ## API de ajustes
 
