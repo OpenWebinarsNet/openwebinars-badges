@@ -16,6 +16,7 @@
  */
 
 $plugin_url = WP_PLUGIN_URL . '/openwebinars-badges';
+$options = array();
 
 /*
  * Add a link to our plugin in the admin menu
@@ -49,6 +50,7 @@ function openwebinars_badges_options_page() {
   }
 
   global $plugin_url;
+  global $options;
 
   /*
    * Check that our form has been submitted
