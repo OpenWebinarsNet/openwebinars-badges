@@ -83,7 +83,7 @@ function openwebinars_badges_options_page() {
     $openwebinars_badges = $options['openwebinars_badges'];
   }
 
-  echo $openwebinars_badges;
+  var_dump( $openwebinars_badges );
 
   require( 'inc/options-page-wrapper.php' );
 
@@ -94,10 +94,10 @@ function openwebinars_badges_options_page() {
  */
 
 function openwebinars_badges_get_badges( $openwebinars_email ) {
-  $json_feed_url= 'http://backpack.openbadges.org/displayer/convert/email';
-  $args = array( 'timeout' => 120, 'email' => $openwebinars_email );
+  $json_feed_url= 'https://backpack.openbadges.org/displayer/convert/email';
+  $args = array( 'body' => array( 'email' => $openwebinars_email ) );
 
-  $json_feed = wp_remote_get( $json_feed_url, $args );
+  $json_feed = wp_remote_post( $json_feed_url, $args );
 
   return $json_feed;
 }
