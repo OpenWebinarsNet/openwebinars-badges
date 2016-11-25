@@ -56,21 +56,21 @@
               <p>Below are your 20 most recent badges.</p>
 
 							<ul class="openwebinars-badges">
-								<li>
-									<?php for ($i=0; $i < 20; $i++) :?>
-									<ul>
-										<li>
-											<img src="<?php echo $plugin_url . '/images/web-navigator.png'; ?>" width="120px">
-										</li>
-										<li class="openwebinars-badge-name">
-											<a href="#">Badge Name</a>
-										</li>
-										<li class="openwebinars-project-name">
-											<a href="#">Project Name</a>
-										</li>
-									</ul>
-								</li>
-								<?php endfor; ?>
+									<?php for( $i = 0; $i < 20; $i++ ): ?>
+									<li>
+										<ul>
+											<li>
+												<img width="120px" src="<?php echo $plugin_url . '/images/web-navigator.png'; ?>">
+											</li>
+											<li class="openwebinars-badge-name">
+												<a href="#">Badge Name</a>
+											</li>
+											<li class="openwebinars-project-name">
+												<a href="#">Project Name</a>
+											</li>
+										</ul>
+									</li>
+									<?php endfor; ?>
 							</ul>
 						</div>
 						<!-- .inside -->
