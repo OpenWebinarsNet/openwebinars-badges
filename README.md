@@ -228,13 +228,15 @@ Este es uno de los hooks más utilizados en WordPress, y se usa para añadir un 
 function pluginprefix_front_end_css() {
   wp_enqueue_style( 'pluginprefix_front_end_css', plugins_url( 'css/front-end.css', __FILE__ ) );
 }
-add_action( 'wp_enqueue_scripts', 'pluginprefix_front_end_css' );```
+add_action( 'wp_enqueue_scripts', 'pluginprefix_front_end_css' );
+```
 
 `admin_head`
 
 Este gancho te permite hacer algo muy similar a mostrar CSS en el front-end del sitio, pero en este caso, `admin_head` lo hace en el back-end.
 
-```/*
+```
+/*
  * Ejemplo del gancho de acción admin_head()
  *
  * Usaremos esto para darle estilos personalizados a nuestro plugin
