@@ -12,6 +12,8 @@
 
 				<div class="meta-box-sortables ui-sortable">
 
+					<?php if ( !isset( $openwebinars_email ) || $openwebinars_email == '' ): ?>
+
 					<div class="postbox">
 
 						<div class="handlediv" title="Click to toggle"><br></div>
@@ -44,6 +46,9 @@
 						<!-- .inside -->
 
 					</div>
+
+				<?php else: ?>
+
 					<!-- .postbox -->
           <div class="postbox">
 
@@ -79,6 +84,8 @@
 					</div>
 					<!-- .postbox -->
 
+					<?php endif; ?>
+
 				</div>
 				<!-- .meta-box-sortables .ui-sortable -->
 
@@ -90,6 +97,8 @@
 
 				<div class="meta-box-sortables">
 
+					<?php if ( isset( $openwebinars_email ) && $openwebinars_email != '' ): ?>
+
 					<div class="postbox">
 						<h3><span>Chip' Profile</span></h3>
 						<div class="inside">
@@ -98,11 +107,23 @@
 								<li>Badges: <strong>200</strong></li>
 								<li>Points: <strong>10000</strong></li>
 							</ul>
+							<form name="openwebinars_email_form" action="" method="post">
+								<input type="hidden" name="openwebinars_form_submitted" value="Y">
+								<p>
+									<label for="openwebinars_email">OpenWebinars email</label>
+								</p>
+                <p>
+									<input name="openwebinars_email" id="openwebinars_email" type="text" value="<?php echo $openwebinars_email; ?>"/>
+								</p>
+                <p>
+                  <input class="button-primary" type="submit" name="openwebinars_email_submit" value="<?php esc_attr_e( 'Update' ); ?>" />
+                </p>
+              </form>
 						</div>
 						<!-- .inside -->
 					</div>
 					<!-- .postbox -->
-
+					<?php endif; ?>
 				</div>
 				<!-- .meta-box-sortables -->
 
