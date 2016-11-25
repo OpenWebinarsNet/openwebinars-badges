@@ -61,10 +61,13 @@ function openwebinars_badges_options_page() {
     if ( $hidden_field == 'Y' ) {
       $openwebinars_email = esc_html( $_POST['openwebinars_email'] );
 
+      $openwebinars_badges = openwebinars_badges_get_badges( $openwebinars_email );
+
       /*
        * Store form options in database
        */
       $options['openwebinars_email']    = $openwebinars_email;
+      $options['openwebinars_badges']    = $openwebinars_badges;
       $options['last_updated']          = time();
 
       update_option( 'openwebinars_badges', $options );
@@ -77,12 +80,27 @@ function openwebinars_badges_options_page() {
 
   if( $options != '' ) {
     $openwebinars_email = $options['openwebinars_email'];
+    $openwebinars_badges = $options['openwebinars_badges'];
   }
+
+  echo $openwebinars_badges;
 
   require( 'inc/options-page-wrapper.php' );
 
 }
 
+/*
+ * Get the badges from Mozilla Backpack
+ */
+
+function openwebinars_badges_get_badges( $openwebinars_email ) {
+  $json_feed_url= 'http://backpack.openbadges.org/displayer/convert/email';
+  $args = array( 'timeout' => 120, 'email' => $openwebinars_email );
+
+  $json_feed = wp_remote_get( $json_feed_url, $args );
+
+  return $json_feed;
+}
 
 /*
  * Addind custom styles to our plugin

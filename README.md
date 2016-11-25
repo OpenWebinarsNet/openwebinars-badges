@@ -1084,6 +1084,27 @@ La tabla `options` tiene 4 campos:
 + `option_value` - guardará toda la información del plugin que queramos.
 + `autoload` - por defecto es `yes`, así podremos cargar la información desde el arranque de WordPress.
 
+## API de ajustes
+
+WordPress provee dos APIs para hacer las interfaces administrativas más fáciles de construir, securizar y que sean acordes con el diseño del resto.
+
+La API de Ajustes se centra en proveer un camino para los desarrolladores par acrear formularios y manejar los datos de los mismos.
+
+Aquí tienes algunos ejemplos que realiza la API:
+
++ Manejo de peticiones de formularios - Deja que WordPress recupere y guarde tus peticiones `$_POST`.
++ Incluye medidas de seguridad - Obtienes medidas de seguridad extra como nonces, etc.
++ Sanea tus datos - Obtieens acceso a los mismos métodos que el resto de WordPress usa para asegurar cadenas.
+
+En [este enlace][9cb865ef] puedes ver los métodos que usarás para utilizar esta API.
+
+  [9cb865ef]: https://developer.wordpress.org/plugins/settings/settings-api/#function-reference "Funciones para la API de ajustes"
+
+## API de opciones
+
+La API de opciones se centrar en manejar los datos con un sistema sencillo de clave/valor.
+
+
 Aunque MySQL no permite guardar arrays, sí que podemos serializarlos en cadenas. Las funciones `add_option`, `get_option`, `update_option` y `delete_option` nos ayudarán a realizar operaciones CRUD con la tabla `options` y nuestro plugin.
 
 ```
@@ -1098,11 +1119,24 @@ $options['last_updated']          = time();
 update_option( 'openwebinars_badges', $options );
 ```
 
-## API de ajustes
+Conectando el plugin con APIs de terceros
+======
 
-## API de opciones
+## JSON como API
 
-Plugins Orientados a Objetos
+JSON son las siglas para JavaScript Object Notation, por lo tanto un archivo JSON contiene un objeto JavaScript, pero casi todos los lenguajes de programación modernos poseen métodos para convertir ese objeto de JS en algo entendible por el propio lenguaje.
+
+Usamos JSON en nuestros sitios para intercambiar datos entre diferentes sitios o incluso dentro del mismo sitio. Para nuestro proyecto, recibiremos la información de los badges de un usuario en un archivo JSON. Usaremos la [Api de OpenBadges Backpack][4b5490bd].
+
+
+
+  [4b5490bd]: https://github.com/mozilla/openbadges-backpack/blob/master/docs/apis/displayer_api.md "Mozilla Hosted Backpack - Displayer API"
+
+## Obteniendo y almacenando un feed JSON
+
+## Parseando JSON con PHP
+
+Plugins Orientados a Objetos
 ======
 
 ## Repaso a la OOP
@@ -1112,15 +1146,6 @@ update_option( 'openwebinars_badges', $options );
 ## Documentando el plugin
 
 ## Herencia
-
-Conectando el plugin con APIs de terceros
-======
-
-## JSON como API
-
-## Obteniendo y almacenando un feed JSON
-
-## Parseando JSON con PHP
 
 Creando Widgets y Shortcodes
 ======
