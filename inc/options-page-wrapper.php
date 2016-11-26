@@ -59,20 +59,17 @@
 						</h2>
 
 						<div class="inside">
-              <p>Below are your 20 most recent badges.</p>
+              <p>Below are your most recent badges.</p>
 
 							<ul class="openwebinars-badges">
-									<?php for( $i = 0; $i < 20; $i++ ): ?>
+									<?php for( $i = 0; $i < count( $openwebinars_badges->{'badges'} ); $i++ ): ?>
 									<li>
 										<ul>
 											<li>
-												<img width="120px" src="<?php echo $plugin_url . '/images/web-navigator.png'; ?>">
+												<img width="120px" src="<?php echo $openwebinars_badges->{'badges'}[$i]->{'assertion'}->{'badge'}->{'image'}; ?>">
 											</li>
 											<li class="openwebinars-badge-name">
-												<a href="#">Badge Name</a>
-											</li>
-											<li class="openwebinars-project-name">
-												<a href="#">Project Name</a>
+												<a href="<?php echo $openwebinars_badges->{'badges'}[$i]->{'assertion'}->{'badge'}->{'criteria'}; ?>"><?php echo $openwebinars_badges->{'badges'}[$i]->{'assertion'}->{'badge'}->{'name'}; ?></a>
 											</li>
 										</ul>
 									</li>
