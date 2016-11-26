@@ -101,18 +101,16 @@
 						<div class="inside">
 							<p><img src="<?php echo $plugin_url . '/images/profile.png'; ?>" width='100%' class='openwebinars-gravatar' alt="Chip squirrel' Profile"></p>
 							<ul class="openwebinars-badges-and-points">
-								<li>Badges: <strong>200</strong></li>
-								<li>Points: <strong>10000</strong></li>
+								<li>Badges: <strong><?php echo count($openwebinars_badges->{'badges'}); ?></strong>
+								</li>
 							</ul>
-							<form name="openwebinars_email_form" action="" method="post">
+							<form class="openwebinars-form" name="openwebinars_email_form" action="" method="post">
 								<input type="hidden" name="openwebinars_form_submitted" value="Y">
 								<p>
 									<label for="openwebinars_email">OpenWebinars email</label>
 								</p>
                 <p>
 									<input name="openwebinars_email" id="openwebinars_email" type="text" value="<?php echo $openwebinars_email; ?>"/>
-								</p>
-                <p>
                   <input class="button-primary" type="submit" name="openwebinars_email_submit" value="<?php esc_attr_e( 'Update' ); ?>" />
                 </p>
               </form>

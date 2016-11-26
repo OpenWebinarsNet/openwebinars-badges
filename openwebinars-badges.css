@@ -32,12 +32,6 @@
 	margin-bottom: 5px;
 }
 
-.postbox .openwebinars-project-name a {
-	font-size: .8em;
-	text-decoration: none;
-	line-height: .5em
-}
-
 .postbox .openwebinars-badges-and-points li {
 	padding: 5px 10px;
 	background: #474747;
@@ -53,4 +47,8 @@
 
 .postbox .openwebinars-badges-and-points strong {
 	color: #92ae57;
+}
+
+.postbox .openwebinars-form {
+	clear: both;
 }
