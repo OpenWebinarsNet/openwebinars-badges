@@ -83,7 +83,9 @@ function openwebinars_badges_options_page() {
     $openwebinars_badges = $options['openwebinars_badges'];
   }
 
-  var_dump( $openwebinars_badges );
+  // if ( isset($openwebinars_badges) ) {
+  //   var_dump( $openwebinars_badges );
+  // }
 
   require( 'inc/options-page-wrapper.php' );
 
@@ -99,7 +101,14 @@ function openwebinars_badges_get_badges( $openwebinars_email ) {
 
   $json_feed = wp_remote_post( $json_feed_url, $args );
 
-  return $json_feed;
+  // $openwebinars_api_object = json_decode( $json_feed['body'] );
+  // $openwebinars_api_groups = wp_remote_get( 'http://backpack.openbadges.org/displayer/343384/groups.json' );
+
+  $openwebinars_api_badges = wp_remote_get( 'http://backpack.openbadges.org/displayer/343384/group/116325.json' );
+
+  $openwebinars_api_badges_json = json_decode( $openwebinars_api_badges['body'] );
+
+  return $openwebinars_api_badges_json;
 }
 
 /*
