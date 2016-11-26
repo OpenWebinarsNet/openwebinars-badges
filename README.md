@@ -47,13 +47,13 @@
 	- [Funciones básicas con la tabla wp_options](#funciones-bsicas-con-la-tabla-wpoptions)
 	- [API de ajustes](#api-de-ajustes)
 	- [API de opciones](#api-de-opciones)
+	- [JSON como API](#json-como-api)
+	- [Obteniendo y almacenando un feed JSON](#obteniendo-y-almacenando-un-feed-json)
+	- [Parseando JSON con PHP](#parseando-json-con-php)
 	- [Repaso a la OOP](#repaso-a-la-oop)
 	- [Construyendo un plugin Orientado a Objetos](#construyendo-un-plugin-orientado-a-objetos)
 	- [Documentando el plugin](#documentando-el-plugin)
 	- [Herencia](#herencia)
-	- [JSON como API](#json-como-api)
-	- [Obteniendo y almacenando un feed JSON](#obteniendo-y-almacenando-un-feed-json)
-	- [Parseando JSON con PHP](#parseando-json-con-php)
 	- [Cómo crear Widgets de WordPress](#cmo-crear-widgets-de-wordpress)
 	- [Añadiendo ajustes a un Widget](#aadiendo-ajustes-a-un-widget)
 	- [Añadiendo estilos personalizados a un Widget](#aadiendo-estilos-personalizados-a-un-widget)
@@ -1130,13 +1130,32 @@ JSON son las siglas para JavaScript Object Notation, por lo tanto un archivo JSO
 
 Usamos JSON en nuestros sitios para intercambiar datos entre diferentes sitios o incluso dentro del mismo sitio. Para nuestro proyecto, recibiremos la información de los badges de un usuario en un archivo JSON. Usaremos la [Api de OpenBadges Backpack][4b5490bd].
 
-
-
   [4b5490bd]: https://github.com/mozilla/openbadges-backpack/blob/master/docs/apis/displayer_api.md "Mozilla Hosted Backpack - Displayer API"
 
 ## Obteniendo y almacenando un feed JSON
 
+Para obtener datos de una API puedes usar dos funciones que usan los diferentes métodos, GET y POST, las funciones son `wp_remote_get` y `wp_remote_post`.
+
+Sin embargo, estos métodos devuelven un array, y no texto en formato JSON, para poder obtenerlo, normalmente tendrás que apuntar al cuerpo del array y decodificarlo.
+
 ## Parseando JSON con PHP
+
+Para poder pasar la respuesta de Array a JSON, PHP tiene una serie de métodos que nos pueden ahorrar mucho trabajo, ejemplo de ello es el método `json_decode`.
+
+Aquí tienes un ejemplo básico de llamada a una API y parseo de la información en JSON.
+
+```
+function openwebinars_badges_get_badges( $openwebinars_email ) {
+  $json_feed_url= 'https://backpack.openbadges.org/displayer/convert/email';
+  $args = array( 'body' => array( 'email' => $openwebinars_email ) );
+
+  $json_feed = wp_remote_post( $json_feed_url, $args );
+
+  $openwebinars_profile = json_decode( $json_feed['body'] );
+
+  return $openwebinars_profile;
+}
+```
 
 Plugins Orientados a Objetos
 ======
@@ -1153,6 +1172,8 @@ Plugins Orientados a Objetos
 ======
 
 ## Cómo crear Widgets de WordPress
+
+Para construir un widget usaremos la función `register_widget`. 
 
 ## Añadiendo ajustes a un Widget
 
