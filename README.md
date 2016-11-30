@@ -1162,20 +1162,279 @@ Plugins Orientados a Objetos
 
 ## Repaso a la OOP
 
+Una de las cosas que a los desarrolladores le gustan (u odian) de WordPress es su baja barrera de entrada. La media de los programadores comenzarán a escribir código eficiente en WordPress en muy poco tiempo. Pero WordPress no es solo una herramienta con la que se pueden hacer pequeñas cosas fácilmente. WordPress permite desplegar todo el poder que tienen sus lenguajes base, como PHP.
+
+Uno de los paradigmas de programación más utilizados en la actualidad es la Programación Orientada a Objetos. Este paradigma se basa en los siguietnes componentes:
+
++ Clases. Una clase es un modelo para la creación de un objeto. Describiéndolo semánticamente, un sustantivo sería un objeto, un adjetivo un atributo o propiedad y un verbo sería un método o función.
++ Tipos. Existen dos tipos de datos, simples y complejos. Los tipos de datos simples represetan el dato tal como se muestra. Normalmente son datos de tipo verdadero o falso, decimales y palabras y/o sentencias. Los tipos de datos comlejos son principalmente arrays y objetos.
++ Estructuras d econtrol. Describen como podemos controlar el flujo del código a través de una serie de factores. Las princiapels son `if/then` y `switch/case`. Pero existen estructuras más complejas como los bucles, `for`, `foreach`, `do` y `while`.
++ Funciones y atributos. Las funciones son usadas como una unidad de trabajo completa pero también usan algunas de las estructuras mencionadas arribas, variables, condicionales, bucles, etc. Los atributos son variables dentro de una clase.
++ Ámbito (Scope). El scope se refiere a cómo las variables y las funciones pueden ser accesibles de objetos u objetos hijos dentro del programa. El ámbito de estas variables y funciones puede ser: `public`, `protected` y `private`.
+
 ## Construyendo un plugin Orientado a Objetos
+
+Un plugin orientado a objetos requiere más que nunca una organización de archivos y carpetas muy eficiente. Normalmente tendremos como mínimo un archivo PHP con el plugin del plugin, archivo README, carpetas admin, includes, languages y public.
+
+![Estructura de carpetas de un plugin](https://www.dropbox.com/s/xe8nbqo2qlv4qxk/single-post-meta-manager-organization.jpg?raw=0)
+
+Todos los archivos que realicen tareas "administrativas" estarán en la carpeta `admin`. Un ejemplo de estructura de archivo que realice tareas administrativas sería:
+
+```
+<?php
+
+class Single_Post_Meta_Manager_Admin {
+
+    protected $version;
+
+    public function __construct( $version ) {
+        $this->version = $version;
+    }
+
+    public function enqueue_styles() {
+
+    }
+
+    public function add_meta_box() {
+
+    }
+
+}
+```
+
+En la carpeta Includes solemos colocar un archivo llamado `loader` que se encarga de coordinar todos los ganchos existentes en el plugin:
+
+```
+<?php
+
+class Single_Post_Meta_Manager_Loader {
+
+    protected $actions;
+
+    protected $filters;
+
+    public function __construct() {
+
+    }
+
+    public function add_action( $hook, $component, $callback ) {
+
+    }
+
+    public function add_filter( $hook, $component, $callback ) {
+
+    }
+
+    private function add( $hooks, $hook, $component, $callback ) {
+
+    }
+
+    public function run() {
+
+    }
+
+}
+```
+
+Finalmente, el código principal de nuestro plugin estará incluido en el archivo principal o podemos crear una nueva clase en la carpeta includes:
+
+```
+<?php
+
+class Single_Post_Meta_Manager {
+
+    protected $loader;
+
+    protected $plugin_slug;
+
+    protected $version;
+
+    public function __construct() {
+
+        $this->plugin_slug = 'single-post-meta-manager-slug';
+        $this->version = '0.1.0';
+
+    }
+
+    private function load_dependencies() {
+
+    }
+
+    private function define_admin_hooks() {
+
+    }
+
+    public function run() {
+
+    }
+
+    public function get_version() {
+        return $this->version;
+    }
+
+}
+```
+
+Si hemos elegido la primera opción, crear una clase en la carpeta includes con el código principal, entonces en nuestro arcihvo principal en la raíz de nuestro plugin tendremos que inciar nuestro código.
+
+```
+if ( ! defined( 'WPINC' ) ) {
+    die;
+}
+
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-single-post-meta-manager.php';
+
+function run_single_post_meta_manager() {
+
+    $spmm = new Single_Post_Meta_Manager();
+    $spmm->run();
+
+}
+
+run_single_post_meta_manager();
+```
 
 ## Documentando el plugin
 
+La documentación oficial de WordPress provee una [guía específica][1b02483a] para la documentación en PHP. Lo primero queu tenemos que tener en cuenta en nuestra documentación son:
+
++ Comentarios en cabecera de archivos.
+
+```
+/**
+ * Short Description (no period for file headers)
+ *
+ * Long Description.
+ *
+ * @link URL
+ * @since x.x.x (if available)
+ *
+ * @package WordPress
+ * @subpackage Component
+ */
+```
+
++ Comentarios en línea de sentencias `require`.
+
+```
+/**
+ * Short description. (use period)
+ */
+require_once( ABSPATH . '/filename.php' );
+```
+
++ Definiciones de clases y funciones.
+
+```
+/**
+ * Short description. (use period)
+ *
+ * Long description.
+ *
+ * @since x.x.x
+ *
+ * @see Function/method/class relied on
+ * @link URL
+ */
+```
+
+```
+/**
+ * Short description. (use period)
+ *
+ * Long description.
+ *
+ * @since x.x.x
+ * @access (for functions: only use if private)
+ *
+ * @see Function/method/class relied on
+ * @link URL
+ * @global type $varname Short description.
+ *
+ * @param  type $var Description.
+ * @param  type $var Optional. Description.
+ * @return type Description.
+ */
+```
+
++ Variables y propiedades de clases.
+
+```
+/**
+ * Short description. (use period)
+ *
+ * @since x.x.x
+ * @access (private, protected, or public)
+ * @var type $var Description.
+ */
+```
+
+Hablemos también de los PSR Standars, estos son recomendaciones propuestas por el grupo PHP Framework Interop Gropu. Puedes leer sobre estos estándares aquí: [Recomendaciones de PHP Standards][e8d1946d].
+
+  [1b02483a]: https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/php/ "Estándar de documentación en PHP"
+  [e8d1946d]: http://www.php-fig.org/psr/ "PHP Standars Recommendations"
+
 ## Herencia
+
+En la programación orientada a objetos, la herencia es cuando un objeto o clase está basado en otro objeto o clase, usando la misma implementación. Es un mecanismo para reusar el código. Las relaciones de objetos y clases a través de la herencia dan origen a la jerarquía.
+
+PHP provee las siguientes facilidades para usar la herencia:
+
++ `extends` es una palabra reservada que indica que una clase es hija de otra clase.
++ `private` es un atributo que se aplica a las propiedades y funciones que significa que son accesible sólo dentro del contexto de la clase en la que han sido definidas.
++ `protected` es similar a `private` con la excepción que las propiedades y métodos que estén marcadas como `protected` pueden ser accesible por la clase dada y por cualquier hijo.
++ `public` es lo opuesto a `privadte` lo que significa que cualquier clase - la clase dada, una subclase o una clase de terceros - puede acceder a la propiedad o método para cambiar su información o llamar a la función.
+
+El operador `::` permite acceder a elementos estáticos o constantes y socbreescribir propieaddes o métodos de una clase.
 
 Creando Widgets y Shortcodes
 ======
 
 ## Cómo crear Widgets de WordPress
 
-Para construir un widget usaremos la función `register_widget`. 
+Para construir un widget usaremos la función `register_widget`. Puedes usar el código de ejemplo básico que aparece en la documentación de WordPress.
+
+```
+class MyNewWidget extends WP_Widget {
+
+	function __construct() {
+		// Instantiate the parent object
+		parent::__construct( false, 'My New Widget Title' );
+	}
+
+	function widget( $args, $instance ) {
+		// Widget output
+	}
+
+	function update( $new_instance, $old_instance ) {
+		// Save widget options
+	}
+
+	function form( $instance ) {
+		// Output admin widget options form
+	}
+}
+
+function myplugin_register_widgets() {
+	register_widget( 'MyNewWidget' );
+}
+
+add_action( 'widgets_init', 'myplugin_register_widgets' );
+```
+
+Los Widgets son un buen ejemplo de Programación Orientada a Objetos en WordPress. Analizaremos las principales funciones que incluye la clase Widget y para qué sirven.
+
+El método `widget` nos permitirá establecer las opciones que se mostrarán en la página de Edición de Widgets en el Escritorio de WordPress. Para ello podemos usar la función [`extract()`][75e479b8] y crear una variable por cada atributo del array `$args`. Luego usaremos estos argumentos para mostrar el título, la descripción y otras opciones en el editor de Widgets.
+
+El método `update` sustituye los parámetros asignados a la antigua instancia del widget y los asigna a la nueva.
+
+El método `form` es el que nos permitirá "imprimir" o mostrar los atributos extraídos desde el método `widget` y mostrarlos en la pantalla de Edición de Widgets. Para ello podremos crear un archivo en el que incluiremos el HTML para estos elementos y añadirlo con la función `require`.
+
+  [75e479b8]: http://php.net/manual/es/function.extract.php "Función extract"
 
 ## Añadiendo ajustes a un Widget
+
+
 
 ## Añadiendo estilos personalizados a un Widget
 
