@@ -1424,9 +1424,9 @@ add_action( 'widgets_init', 'myplugin_register_widgets' );
 
 Los Widgets son un buen ejemplo de Programación Orientada a Objetos en WordPress. Analizaremos las principales funciones que incluye la clase Widget y para qué sirven.
 
-El método `widget` nos permitirá establecer las opciones que se mostrarán en la página de Edición de Widgets en el Escritorio de WordPress. Para ello podemos usar la función [`extract()`][75e479b8] y crear una variable por cada atributo del array `$args`. Luego usaremos estos argumentos para mostrar el título, la descripción y otras opciones en el editor de Widgets.
+El método `widget` nos permitirá establecer las opciones que se mostrarán en el frontedn de nuestro sitio. Para ello podemos usar la función [`extract()`][75e479b8] y crear una variable por cada atributo del array `$args`. Luego usaremos estos argumentos para mostrar el título, la descripción y otras opciones en nuestro sitio.
 
-El método `update` sustituye los parámetros asignados a la antigua instancia del widget y los asigna a la nueva.
+El método `update` sustituye los parámetros asignados a la antigua instancia del widget y los asigna a la nueva. Además guarda las opciones establecidas en el panel de administración por la función `form` en la variable `$instance`.
 
 El método `form` es el que nos permitirá "imprimir" o mostrar los atributos extraídos desde el método `widget` y mostrarlos en la pantalla de Edición de Widgets. Para ello podremos crear un archivo en el que incluiremos el HTML para estos elementos y añadirlo con la función `require`.
 
@@ -1434,40 +1434,384 @@ El método `form` es el que nos permitirá "imprimir" o mostrar los atributos ex
 
 ## Añadiendo ajustes a un Widget
 
+El método `form` como dijimos anteriormente nos permitirá añadir ajustes al widget y mostrar en la página de creación de widgets. Normalmente, crearemos una plantilla externa y la incluiremos dentro de este método. En esta plantilla basta con añadir código HTML para mostrar los ajustes.
 
+La variable `$instance` almacenará los valores que enviemos por el formulario, y será la que posteriormente utilicemos para mostrar el funcionamiento de nuestro widget.
 
 ## Añadiendo estilos personalizados a un Widget
 
-## Añadiendo estilos personalizados a un Widget en el Front End
+Para añadir estilos personalizados a un Widget tanto en Frontend como en Backend podremos añadir un solo archivo css y añadirlo con la función `wp_enqueue_style`.
 
 ## Cómo crear un Shortcode
 
+Un shortcode es En la [documentación de la API de Shortcodes][8fe0d064] puedes ver un ejemplo sencillo de código de un shortcode.
+
+```
+//[foobar]
+function foobar_func( $atts ){
+	return "foo and bar";
+}
+add_shortcode( 'foobar', 'foobar_func' );
+```
+
+Para definir los atributos que acepta un shortcode, se usa la función `shortcode_atts`. Se puede usar junto con la función `extract()` de PHP para extraer dichos atributos en variables separadas.
+
+```
+extract( shortcode_atts( array(
+	'num_badges' => '8',
+	'tooltip' 	 => 'on'
+	), $atts ) );
+```
+
+Cuanto trabajamos con shortcodes y queremos usar la sentencia `require` tenemos que añadir algo de código extra, ya que por defecto mostrará el contenido del shortcode en lo más alto de la publicación. Así que necesitamos esperar hasta que el shorcode sea llamado y entonces obtener el archivo de la sentencia `require`. Para ello usaremos el buffering de PHP.
+
+```
+ob_start();
+require( 'inc/front-end.php' );
+
+$content = ob_get_clean();
+
+return $content;
+```
+
+  [8fe0d064]: https://codex.wordpress.org/Shortcode_API "API Shortcode"
+
 ## Añadiendo AJAX a plugins en el Front End
+
+AJAX permite hacer peticiones al servidor sin tener que volver a cargar la página. El gancho [`wp_ajax_(action)`][206c9cde] te permitirá crear manejadores personalizados para tus peticiones AJAX. También puedes usar la función `wp_ajax_nopriv_(action)` para ejecutar la petición con usuarios no logueados. Aquí tienes un ejemplo de código que usa AJAX en WordPress.
+
+```
+<?php
+add_action( 'admin_enqueue_scripts', 'my_enqueue' );
+function my_enqueue($hook) {
+    if( 'index.php' != $hook ) {
+	// Only applies to dashboard panel
+	return;
+    }
+
+	wp_enqueue_script( 'ajax-script', plugins_url( '/js/my_query.js', __FILE__ ), array('jquery') );
+
+	// in JavaScript, object properties are accessed as ajax_object.ajax_url, ajax_object.we_value
+	wp_localize_script( 'ajax-script', 'ajax_object',
+            array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'we_value' => 1234 ) );
+}
+
+// Same handler function...
+add_action( 'wp_ajax_my_action', 'my_action_callback' );
+function my_action_callback() {
+	global $wpdb;
+	$whatever = intval( $_POST['whatever'] );
+	$whatever += 10;
+        echo $whatever;
+	wp_die();
+}
+```
+
+  [206c9cde]: https://codex.wordpress.org/Plugin_API/Action_Reference/wp_ajax_(action) "Función wp_ajax_(action)"
 
 Extendiendo un plugin
 ======
 
 ## Metadatos
 
+Los metadatos almacenan la información sobre publicaciones como entradas, páginas, o usuarios, taxonomías...
+
+Tienes una serie de funciones disponibles para manejar metadatos. Por ejemplo las funciones `update_post_meta()`, `add_post_meta() y `delete_post_meta`.
+
+Dentro de los metadatos también tenemos que considerar las Metaboxes. Cuando un usuario edita una publicación, la página de edición está compuesta por muchas metaboxes. Puedes añadir las tuyas propias con la función `add_meta_box()`.
+
+```
+function wporg_add_custom_box()
+{
+    $screens = ['post', 'wporg_cpt'];
+    foreach ($screens as $screen) {
+        add_meta_box(
+            'wporg_box_id',           // Unique ID
+            'Custom Meta Box Title',  // Box title
+            'wporg_custom_box_html',  // Content callback, must be of type callable
+            $screen                   // Post type
+        );
+    }
+}
+add_action('add_meta_boxes', 'wporg_add_custom_box');
+```
+
 ## Custom Post Types
+
+Una de las funcionalidades más potentes de WordPress son los Custom Post Types o Tipos de Publicación Personalizada. Los CPT se guardan en la tabla `posts`. Puedes crear tus propios CPT con la función `register_post_type`.
+
+```
+function wporg_custom_post_type()
+{
+    register_post_type('wporg_product',
+                       [
+                           'labels'      => [
+                               'name'          => __('Products'),
+                               'singular_name' => __('Product'),
+                           ],
+                           'public'      => true,
+                           'has_archive' => true,
+                       ]
+    );
+}
+add_action('init', 'wporg_custom_post_type');
+
+```
 
 ## Taxonomías
 
+Una taxonomía es una característica de WordPress que se usa para clasificar o agrupar cosas, pueden ser jerárquicas o planas. Un ejemplo de Taxonomía son las categorías de las entradas.
+
+Puedes crear tus propias taxonomías en conjunción con los CPT para añadir funcionalidad extra a tu plugin.
+
+```
+<?php
+/*
+* Plugin Name: Course Taxonomy
+* Description: A short example showing how to add a taxonomy called Course.
+* Version: 1.0
+* Author: developer.wordpress.org
+* Author URI: https://wordpress.slack.com/team/aternus
+*/
+
+function wporg_register_taxonomy_course()
+{
+    $labels = [
+        'name'              => _x('Courses', 'taxonomy general name'),
+        'singular_name'     => _x('Course', 'taxonomy singular name'),
+        'search_items'      => __('Search Courses'),
+        'all_items'         => __('All Courses'),
+        'parent_item'       => __('Parent Course'),
+        'parent_item_colon' => __('Parent Course:'),
+        'edit_item'         => __('Edit Course'),
+        'update_item'       => __('Update Course'),
+        'add_new_item'      => __('Add New Course'),
+        'new_item_name'     => __('New Course Name'),
+        'menu_name'         => __('Course'),
+    ];
+    $args = [
+        'hierarchical'      => true, // make it hierarchical (like categories)
+        'labels'            => $labels,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => ['slug' => 'course'],
+    ];
+    register_taxonomy('course', ['post'], $args);
+}
+add_action('init', 'wporg_register_taxonomy_course');
+```
+
 ## Usuarios
+
+Cada usuario de WordPress tiene como mínimo un nombre de usuario, contraseña y e-mail, además de un Rol y ciertas capacidades asignadas. Puedes crear, importar, editar y eliminar usuarios con las muchas funciones que trae WordPress para ello. El ejemplo más sencillo es [`wp_insert_user()`](https://developer.wordpress.org/reference/functions/wp_insert_user/) o su variante `wp_update_user()`.
+
+```
+<?php
+
+$user_id = 1;
+$website = 'http://wordpress.org';
+
+$user_id = wp_update_user( array( 'ID' => $user_id, 'user_url' => $website ) );
+
+if ( is_wp_error( $user_id ) ) {
+    // There was an error, probably that user doesn't exist.
+} else {
+```
 
 ## JavaScript en un plugin PHP
 
+JavaScript es una parte muy importante de muchos plugins. WordPress viene con una variedad de [librerías JavaScript ya incorporadas en el Core](https://developer.wordpress.org/theme/basics/including-css-javascript/#default-scripts-included-and-registered-by-wordpress).
+
+Ten en cuenta que si quieres usar jQuery en WordPress, este está en modo de compatibilidad, así que tendrás que usar la palabra `jQuery` en vez de el símbolo de dolar.
+
+`jQuery.(selector).event(function);`
+
+Recuerda que para añadir un script a tu plugin debes usar la función `wp_enqueue_script`:
+
+```
+wp_enqueue_script( 'ajax-script',
+    plugins_url( '/js/myjquery.js', __FILE__ ),
+    array('jquery')
+);
+```
+
 ## Cron de WordPress
 
+Un Cron es un sistema de programación de tareas disponible en sistemas UNIX. El Cron de Wordpress maneja la programación de tareas en WordPress y muchas características internas de él lo usan, como la comprobación de actualizaciones, la programación de entradas, etc.
+
+Para programar una tarea en WordPress, puedes usar la función `wp_schedule_event()`.
+
+```
+if ( ! wp_next_scheduled( 'bl_cron_hook' ) ) {
+    wp_schedule_event( time(), '5seconds', 'bl_cron_hook' );
+}
+```
+
 ## Internacionalización del plugin
+
+La internacionalización es el proceso de desarrollar tu plugin para que pueda ser fácilmente traducible en cualquier idioma. Si planeas publicar tu plugin en algún repositorio, tendrás que escribirlo completamente en inglés, incluyendo comentarios y documentación, así como cadenas de texto mostradas en el mismo, y luego puedes aportar los ficheros de traducción del plugin.
+
+Para poder internacionalizar tu plugin, puedes usar las funciones:
+
++ __()
++ _e()
++ _x()
++ _ex()
++ _n()
++ _nx()
++ _n_noop()
++ _nx_noop()
++ translate_nooped_plural()
 
 Lanzamiento y soporte de un plugin de WordPress
 ======
 
 ## El archivo Readme.txt
 
+Si estás planeando subir tu plugin al repositorio oficial, el archivo Readme.txt es uno de los más importantes. En él tendrás que añadir una breve descripción de qué hace tu plugin, instrucciones de instalación y las indicaciones sobre cómo obtener soporte.
+
+```
+=== Plugin Name ===
+Contributors: (this should be a list of wordpress.org userid's)
+Donate link: http://example.com/
+Tags: comments, spam
+Requires at least: 4.6
+Tested up to: 4.7
+Stable tag: 4.3
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+
+== Description ==
+
+This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+
+For backwards compatibility, if this section is missing, the full length of the short description will be used, and
+Markdown parsed.
+
+A few notes about the sections above:
+
+*   "Contributors" is a comma separated list of wordpress.org usernames
+*   "Tags" is a comma separated list of tags that apply to the plugin
+*   "Requires at least" is the lowest version that the plugin will work on
+*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
+higher versions... this is just the highest one you've verified.
+*   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
+stable.
+
+    Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the plugin, so
+if the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used
+for displaying information about the plugin.  In this situation, the only thing considered from the trunk `readme.txt`
+is the stable tag pointer.  Thus, if you develop in trunk, you can update the trunk `readme.txt` to reflect changes in
+your in-development version, without having that information incorrectly disclosed about the current stable version
+that lacks those changes -- as long as the trunk's `readme.txt` points to the correct stable tag.
+
+    If no stable tag is provided, it is assumed that trunk is stable, but you should specify "trunk" if that's where
+you put the stable version, in order to eliminate any doubt.
+
+== Installation ==
+
+This section describes how to install the plugin and get it working.
+
+e.g.
+
+1. Upload the plugin files to the `/wp-content/plugins/plugin-name` directory, or install the plugin through the WordPress plugins screen directly.
+1. Activate the plugin through the 'Plugins' screen in WordPress
+1. Use the Settings->Plugin Name screen to configure the plugin
+1. (Make your instructions match the desired user flow for activating and installing your plugin. Include any steps that might be needed for explanatory purposes)
+
+
+== Frequently Asked Questions ==
+
+= A question that someone might have =
+
+An answer to that question.
+
+= What about foo bar? =
+
+Answer to foo bar dilemma.
+
+== Screenshots ==
+
+1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
+the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
+directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
+(or jpg, jpeg, gif).
+2. This is the second screen shot
+
+== Changelog ==
+
+= 1.0 =
+* A change since the previous version.
+* Another change.
+
+= 0.5 =
+* List versions from most recent at top to oldest at bottom.
+
+== Upgrade Notice ==
+
+= 1.0 =
+Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
+
+= 0.5 =
+This version fixes a security related bug.  Upgrade immediately.
+
+== Arbitrary section ==
+
+You may provide arbitrary sections, in the same format as the ones above.  This may be of use for extremely complicated
+plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
+"installation."  Arbitrary sections will be shown below the built-in sections outlined above.
+
+== A brief Markdown Example ==
+
+Ordered list:
+
+1. Some feature
+1. Another feature
+1. Something else about the plugin
+
+Unordered list:
+
+* something
+* something else
+* third thing
+
+Here's a link to [WordPress](http://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax].
+Titles are optional, naturally.
+
+[markdown syntax]: http://daringfireball.net/projects/markdown/syntax
+            "Markdown is what the parser uses to process much of the readme file"
+
+Markdown uses email style notation for blockquotes and I've been told:
+> Asterisks for *emphasis*. Double it up  for **strong**.
+
+`<?php code(); // goes in backticks ?>`
+```
+
 ## Añadiendo el plugin al repositorio de WordPress
+
+Antes de subir tu plugin al repositorio de WordPress sigue estos pasos:
+
+1. Pruébalo, una y otra vez.
+2. Elige un buen nombre.
+3. Escribe una buena documentación.
+4. [Publica la primera versión en WordPress.org.](https://wordpress.org/plugins/add/)
+5. Publica el código en otros repositorios, como Github o Bitbucket.
+6. Escucha a tus usuarios.
+7. Actualiza tu plugin.
 
 ## Dar soporte y monetizar nuestro plugin
 
+Desde la página de plugin tendrás acceso a un foro específico sobre tu plugin, esfuérzate por cuidar a tus usuarios. Pero también puedes ofrecer otro tipo de soporte. Muchos plugins de WordPress tienen funcionalidades extra que se venden por separado en marketplaces como [CodeCanyon](http://codecanyon.com) y que además ofrecen soporte premium por tiempo limitado y pagado.
+
 ## Herramientas para desarrolladores
+
+La herramienta principal de todos los desarrolladores de WordPress es [el plugin Developer.](http://es.wordpress.org/plugins/developer/) Este plugin te permite activar muchas otras funciones de Debug, Log y Consolas que te harán mucho más fácil tu desarollo.
+
+Echa un vistazo a estas otras herramientas:
+
++ [PHP Coding Standars](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards).
++ [XDebug](http://xdebug.org/).
++ [Query Monitor](https://wordpress.org/plugins/query-monitor/).
