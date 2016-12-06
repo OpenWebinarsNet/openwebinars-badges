@@ -1,0 +1,180 @@
+1. ¿Qué hace un plugin de WordPress?
+  a) Cambia el diseño del sitio.
+  b) Permite que WordPress se conecte con Drupal.
+  c) Publica el contenido del sitio en Internet.
+X d) Extiende la funcionalidad de WordPress.
+
+2. Los plugins de WordPress usan el lenguaje...
+  a) Java.
+  b) Cobol.
+X c) PHP.
+  d) Python.
+
+3. Los ... de WordPress devuelven un valor.
+  a) Ganchos (Hooks).
+  b) Acciones (Actions).
+X c) Filtros (Filters).
+  d) Métodos.
+
+4. Las ... de WordPress provocan que se ejecute una función en un determinado instante.
+  a) Ganchos (Hooks).
+X b) Acciones (Actions).
+  c) Filtros (Filters).
+  d) Métodos.
+
+5. Las accciones y los filtros son ejemplos de ...
+  a) Métodos.
+  b) Clases.
+X c) Ganchos (Hooks).
+  d) Atributos.
+
+6. ¿En qué archivo se guarda la meta información del plugin?
+X a) El archivo principal del plugin.
+  b) El archivo readme.txt
+  c) El archivo meta.php
+  d) El archivo styles.css
+
+7. ¿Qué función usamos para añadir un enlace para las opciones de nuestro plugin en el panel de administración?
+X a) add_options_page
+  b) wp_admin_nav
+  c) admin_menu
+  d) register_options_page
+
+8. ¿Qué gancho de acción nos permite añadir enlaces al panel de administración?
+  a) wp_admin_nav
+  b) admin_nav
+X c) admin_menu
+  d) add_options_page
+
+9. Selecciona la ruta correcta para las carpeta del plugin.
+  a) /wp-plugins/
+  b) /wp-includes/plugins/
+X c) /wp-content/plugins
+  d) /plugins/
+
+10. ¿Cuál es la tabla por defecto en la que debes guardar la información de tu plugin?
+  a) posts
+  b) post_meta
+  c) terms
+X d) options
+
+11. Para obtener información de la tabla options de nuestra BD usamos la función...
+X a) get_option
+  b) add_option
+  c) get_options
+  d) add_options
+
+12. Para guardar información en la tabla options de nuestra BD usamos la función...
+  a) get_option
+X b) add_option
+  c) get_options
+  d) add_options
+
+
+13. ¿Qué tipo de datos no es un tipo de dato conocido en MySQL?
+  a) Enteros.
+  b) Coma flotante.
+  c) Cadenas.
+X d) Arrays.
+
+14. ¿Cómo llamamos a la acción de pasar de array a cadena de texto?
+  a) Escapar texto.
+X b) Serializar.
+  c) Convertir.
+  d) Migrar.
+
+15. Si una aplicación o sitio web tiene una API, ¿qué permite esto hacer a otras aplicaciones?
+  a) Permite a los usuarios editar su contenido en el área de Administración.
+  b) Los plugins de WordPress tienen que tener una API para que funcionen.
+X c) Les permite recibir y posiblemente mandar información a través de la API.
+  d) Permite a otro sitio web escribir PHP en otro servidor.
+
+16. ¿Por qué es JSON un formato de datos muy conocido?
+  a) Es fácil de connectarlo con base de datos.
+X b) Es flexible y legible.
+  c) Está escrito en JavaScript.
+  d) Está escrito en PHP.
+
+17. JSON significa...
+  a) JavaScript Object Notation.
+  b) JupiterScrit Oriented Number.
+  c) JavaScript Oriented Number.
+  d) Java Shell Object Notation.
+
+18. ¿Por qué almacenamos el feed de JSON localmente?
+  a) Porque las APIs no te permiten acceder a la información sin almacenarla localmente.
+  b) Permite a los usuarios personalizar su perfil.
+X c) Conlleva menos carga de procesamiento al servidor con la API.
+  d) Así podemos usarlo en nuestro plugin.
+
+19. Para parsear el contenido en JSON usamos la función...
+  a) wp_get
+  b) wp_post
+  c) wp_json
+X d) json_decode
+
+20. Para hacer una petición a un servidor con el método POST usamos la función...
+  a) wp_get
+X b) wp_post
+  c) wp_json
+  d) json_decode
+
+21. ¿Qué método de la clase WP_Widget controla la salida en el front end del sitio?
+X a) widget
+  b) __construct
+  c) update
+  d) form
+
+22. ¿Qué método de la clase WP_Widget guarda las opciones escogidas en el panel del Widget?
+  a) widget
+  b) __construct
+X c) update
+  d) form
+
+23. ¿Qué método de la clase WP_Widget permite personalizar el formulario del Widget en el panel de Widgets del área de administración?
+  a) widget
+  b) __construct
+  c) update
+X d) form
+
+24. ¿Dónde se muestra la información del archivo readme.txt?
+  a) Como un comentario en la tabla opciones.
+  b) En la página de configuración del plugin.
+  c) En la parte superior del archivo principal del plugin.
+X d) En la página de detalles del plugin.
+
+25. La principal función del archivo readme.txt es...
+  a) Enlazar el archivo de estilos y el archivo principal del plugin.
+X b) Dar una información general sobre la configuración y el uso del plugin.
+  c) Proveer soporte opcional para usar el plugin.
+  d) Dar instruciones sobre cómo programar el plugin desde cero.
+
+26. La versión más reciente de WordPress se coloca en el directorio...
+  a) develop
+X b) trunk
+  c) origin
+  d) master
+
+27. ¿Qué sistema de control de versiones usa WordPress?
+X a) SubVersion
+  b) Git
+  c) CVS
+  d) GitHub
+
+28. ¿Dónde se ofrece el soporte para un plugin gratuito?
+  a) WordPress.com
+  b) CodeCanyon.com
+  c) MojoThemes.com
+X d) WordPress.org
+
+29. Si tu plugin es de gratuito puedes publicarlo en...
+  a) WordPress.com
+  b) CodeCanyon.com
+  c) MojoThemes.com
+X d) WordPress.org
+
+30. Los marketplaces ofrecen la opción de...
+X a) vender plugins de WordPress.
+  b) publicar plugins gratuitos.
+  c) tener un repositorio de código.
+  d) conectar con otros desarrolladores.
